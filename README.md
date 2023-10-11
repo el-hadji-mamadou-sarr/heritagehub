@@ -4,4 +4,4 @@ Ce projet a pour but de permettre aux utilisateurs de voir leur arbre généalog
 chaque membre de leur famille.
 
 ## python version
-Python 3.10.11
+Python 3
