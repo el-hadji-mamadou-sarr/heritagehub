@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'heritagehub.heritagehub',
+    'heritagehub.users',
     'rest_framework_simplejwt',
 ]
 
