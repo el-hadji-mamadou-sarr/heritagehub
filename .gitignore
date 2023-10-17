@@ -1,2 +1,6 @@
+# mettre vos dossiers d'environnement ici
 env
 heritagehubenv
+
+# base de données sqlite
+*.sqlite

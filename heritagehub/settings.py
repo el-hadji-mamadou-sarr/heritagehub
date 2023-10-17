@@ -39,8 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'heritagehub.users',
     'rest_framework_simplejwt',
+    'heritagehub.heritagehubapp',
 ]
 
 MIDDLEWARE = [
