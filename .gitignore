@@ -3,4 +3,5 @@ env
 heritagehubenv
 
 # base de données sqlite
-*.sqlite
+*.sqlite3
+migrations/
