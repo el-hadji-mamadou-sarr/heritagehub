@@ -17,6 +17,8 @@ from rest_framework_simplejwt.views import (
 router = routers.DefaultRouter()
 router.register(r'famillies', FamillyViewSet)
 router.register(r'persons', PersonViewSet)
+router.register(r'events', EventViewSet)
+router.register(r'marriages', MarriageViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
