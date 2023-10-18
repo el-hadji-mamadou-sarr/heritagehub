@@ -19,6 +19,7 @@ router.register(r'famillies', FamillyViewSet)
 router.register(r'persons', PersonViewSet)
 router.register(r'events', EventViewSet)
 router.register(r'marriages', MarriageViewSet)
+router.register(r'relations', RelationViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
