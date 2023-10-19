@@ -20,9 +20,10 @@ router.register(r'persons', PersonViewSet)
 router.register(r'events', EventViewSet)
 router.register(r'marriages', MarriageViewSet)
 router.register(r'relations', RelationViewSet)
+router.register(r'users', UserViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('users/auth/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
