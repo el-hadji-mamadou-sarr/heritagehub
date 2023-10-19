@@ -7,4 +7,4 @@ class RelationSerializer(serializers.HyperlinkedModelSerializer):
     person_id = serializers.PrimaryKeyRelatedField(queryset=PersonModel.objects.all())
     class Meta:
         model = RelationModel
-        fields = ('id', 'person_id','other_person_id','relation_type')
+        fields = ('id', 'person_id','other_person_id','relation_type', 'created_by')

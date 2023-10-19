@@ -5,3 +5,4 @@ class RelationModel(models.Model):
     person_id = models.ForeignKey(PersonModel,related_name='relations', on_delete=models.CASCADE, blank=False, null=False)
     other_person_id = models.IntegerField(blank=False, null=False)
     relation_type = models.CharField(max_length=255, blank=False)
+    created_by = models.IntegerField()
