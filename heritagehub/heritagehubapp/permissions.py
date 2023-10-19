@@ -6,7 +6,7 @@ class IsGetRequest(BasePermission):
     
 class CanCreateUser(BasePermission):
     def has_permission(self, request, view):
-        return not request.user.is_authenticated 
+        return request.method == 'POST'
     
 class CanListUsers(BasePermission):
     def has_permission(self, request, view):
