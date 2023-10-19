@@ -5,7 +5,8 @@ from rest_framework.permissions import IsAuthenticated
 from heritagehub.heritagehubapp.models import PersonModel
 from heritagehub.heritagehubapp.serializers.PersonSerializer import PersonSerializer
 from rest_framework.generics import get_object_or_404
-
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 
 class PersonViewSet(viewsets.ModelViewSet):
    
@@ -21,11 +22,32 @@ class PersonViewSet(viewsets.ModelViewSet):
 
         return [permission() for permission in permission_class]
     
+    @swagger_auto_schema(
+        operation_description='Create a person',
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'first_name': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='First name of the person',
+                ),
+                'last_name': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='Last name of the person',
+                ),
+                'birth_date': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='Date of birth of the person',
+                ),
+            }
+        ),
+        responses={201: 'Person created', 400: 'Bad Request'},
+    )
     def create(self, request, *args, **kwargs):
         # get a copy of the request data
         person_data = request.data.copy()
 
-        #add the created_by field to the object
+        # add the created_by field to the object
         person_data['created_by'] = self.request.user.id
         
         serializer = self.get_serializer(data=person_data)
@@ -33,7 +55,10 @@ class PersonViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
   
-
+    @swagger_auto_schema(
+        operation_description='Retrieve a person',
+        responses={200: 'Person retrieved', 404: 'Not Found'},
+    )
     def retrieve(self, request, *args, **kwargs):
       person_id = kwargs.get('pk')
       person = get_object_or_404(PersonModel, pk=person_id)
@@ -41,6 +66,23 @@ class PersonViewSet(viewsets.ModelViewSet):
       serializer = self.get_serializer(person)
       return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(
+        operation_description='Partial update a person',
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'first_name': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='First name of the person',
+                ),
+                'last_name': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='Last name of the person',
+                ),
+            }
+        ),
+        responses={200: 'Person updated', 400: 'Bad Request', 401: 'Unauthorized'},
+    )
     def partial_update(self, request, *args, **kwargs):
         person_id = kwargs['pk']
         person = get_object_or_404(PersonModel, pk=person_id)
@@ -53,6 +95,10 @@ class PersonViewSet(viewsets.ModelViewSet):
         else:
             return Response({"message":"permission denied"}, status=status.HTTP_401_UNAUTHORIZED)
 
+    @swagger_auto_schema(
+        operation_description='Delete a person',
+        responses={200: 'Person deleted', 401: 'Unauthorized'},
+    )
     def destroy(self, request, *args, **kwargs):
         person_id = kwargs['pk']
         person = get_object_or_404(PersonModel, pk=person_id)
@@ -60,4 +106,4 @@ class PersonViewSet(viewsets.ModelViewSet):
             person.delete()
             return Response( status=status.HTTP_200_OK)
         else:
-                return Response({"message":"permission denied"}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"message":"permission denied"}, status=status.HTTP_401_UNAUTHORIZED)
