@@ -42,23 +42,22 @@ class PersonViewSet(viewsets.ModelViewSet):
       return Response(serializer.data, status=status.HTTP_200_OK)
 
     def partial_update(self, request, *args, **kwargs):
-         if self.request.user.id == request.data['created_by']:
-            person_id = kwargs['pk']
-            person = get_object_or_404(PersonModel, pk=person_id)
+        person_id = kwargs['pk']
+        person = get_object_or_404(PersonModel, pk=person_id)
 
+        if self.request.user.id == person.created_by:
             serializer = self.get_serializer(person, data=request.data, partial=True)
             serializer.is_valid(raise_exception=True)
             self.perform_update(serializer)
             return Response(serializer.data, status=status.HTTP_200_OK)
-         else:
+        else:
             return Response({"message":"permission denied"}, status=status.HTTP_401_UNAUTHORIZED)
 
     def destroy(self, request, *args, **kwargs):
-      if self.request.user.id == request.data['created_by']:
         person_id = kwargs['pk']
         person = get_object_or_404(PersonModel, pk=person_id)
-
-        person.delete()
-        return Response( status=status.HTTP_200_OK)
-      else:
-            return Response({"message":"permission denied"}, status=status.HTTP_401_UNAUTHORIZED)
+        if self.request.user.id == person.created_by:
+            person.delete()
+            return Response( status=status.HTTP_200_OK)
+        else:
+                return Response({"message":"permission denied"}, status=status.HTTP_401_UNAUTHORIZED)
