@@ -7,7 +7,8 @@ from heritagehub.heritagehubapp.views import (
     EventViewSet,
     MarriageViewSet,
     RelationViewSet,
-    UserViewSet
+    UserViewSet,
+    LogoutViewSet
 )
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -21,6 +22,7 @@ router.register(r'events', EventViewSet)
 router.register(r'marriages', MarriageViewSet)
 router.register(r'relations', RelationViewSet)
 router.register(r'users', UserViewSet)
+router.register(r'logout', LogoutViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
