@@ -90,6 +90,6 @@ class FamillyViewSet(viewsets.ModelViewSet):
         familly = get_object_or_404(FamillyModel, pk=familly_id)
         if self.request.user.id == familly.created_by:
             familly.delete()
-            return Response( status=status.HTTP_200_OK)
+            return Response( {"message":"deleted"},status=status.HTTP_200_OK)
         else:
             return Response({"message":"permission denied"}, status=status.HTTP_401_UNAUTHORIZED)
