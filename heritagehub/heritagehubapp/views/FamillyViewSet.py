@@ -10,7 +10,7 @@ from drf_yasg.utils import swagger_auto_schema
 
 class FamillyViewSet(viewsets.ModelViewSet):
    
-    queryset = FamillyModel.objects.all()
+    queryset = FamillyModel.objects.all().order_by('id')
     serializer_class = FamillySerializer
     permission_classes=[IsAuthenticated]
 

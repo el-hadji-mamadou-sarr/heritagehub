@@ -7,8 +7,11 @@ chaque membre de leur famille.
 
 - creér votre environnement `python3 -m venv env `
 - activer votre environnement `env/Scripts/activate `
-- installer l'application `pip install -r requirements.txt `
+- installer les dépendances de l'application `pip install -r requirements.txt `
+- créer une nouvelle migration `python manage.py makemigrations `
+- miggrer cette derniére vers la base de donnée `python manage.py migrate `
 
 ## python version
 
-Python 3.11
+Python 3.11.5
+
