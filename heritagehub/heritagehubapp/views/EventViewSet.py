@@ -24,14 +24,16 @@ EVENT_TYPES = [
     "retraite",
     "mort",
     "annivairsaire"]
+
+
 class EventViewSet(viewsets.ModelViewSet):
-   
-    queryset = EventModel.objects.all()
+
+    queryset = EventModel.objects.all().order_by('id')
     serializer_class = EventSerializer
-    permission_classes=[IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_permissions(self):
-        if self.action =='list':
+        if self.action == 'list':
             permission_class = [IsGetRequest]
         else:
             permission_class = [IsAuthenticated]
@@ -57,7 +59,8 @@ class EventViewSet(viewsets.ModelViewSet):
                 ),
             }
         ),
-        responses={201: 'Event created', 400: 'Bad Request', 406: 'Not Acceptable'},
+        responses={201: 'Event created',
+                   400: 'Bad Request', 406: 'Not Acceptable'},
     )
     def create(self, request, *args, **kwargs):
         if request.data['event_type'].lower() in EVENT_TYPES:
@@ -68,8 +71,8 @@ class EventViewSet(viewsets.ModelViewSet):
             self.perform_create(serializer)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response({"message":" this event type does not exist"}, status=status.HTTP_406_NOT_ACCEPTABLE)
-    
+            return Response({"message": " this event type does not exist"}, status=status.HTTP_406_NOT_ACCEPTABLE)
+
     @swagger_auto_schema(
         operation_description='Retrieve an event',
         responses={200: 'Event retrieved', 404: 'Not Found'},
@@ -100,21 +103,23 @@ class EventViewSet(viewsets.ModelViewSet):
                 ),
             }
         ),
-        responses={200: 'Event updated', 400: 'Bad Request', 401: 'Unauthorized'},
+        responses={200: 'Event updated',
+                   400: 'Bad Request', 401: 'Unauthorized'},
     )
     def partial_update(self, request, *args, **kwargs):
-        
+
         event_id = kwargs['pk']
         event = get_object_or_404(EventModel, pk=event_id)
-   
-        if self.request.user.id == event.created_by:
-           
-            serializer = self.get_serializer(event, data=request.data, partial=True)
+
+        if self.request.user == event.created_by:
+
+            serializer = self.get_serializer(
+                event, data=request.data, partial=True)
             serializer.is_valid(raise_exception=True)
             self.perform_update(serializer)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            return Response({"message":"permission denied"}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"message": "permission denied"}, status=status.HTTP_401_UNAUTHORIZED)
 
     @swagger_auto_schema(
         operation_description='Delete an event',
@@ -123,9 +128,8 @@ class EventViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         event_id = kwargs['pk']
         event = get_object_or_404(EventModel, pk=event_id)
-        if self.request.user.id == event.created_by:
+        if self.request.user == event.created_by:
             event.delete()
-            return Response( status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_200_OK)
         else:
-            return Response({"message":"permission denied"}, status=status.HTTP_401_UNAUTHORIZED)
-   
+            return Response({"message": "permission denied"}, status=status.HTTP_401_UNAUTHORIZED)

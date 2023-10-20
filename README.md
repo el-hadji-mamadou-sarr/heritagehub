@@ -11,7 +11,10 @@ chaque membre de leur famille.
 - créer une nouvelle migration `python manage.py makemigrations `
 - miggrer cette derniére vers la base de donnée `python manage.py migrate `
 
+## Faire les tests unitaires
+
+`python manage.py tests `
+
 ## python version
 
 Python 3.11.5
-
