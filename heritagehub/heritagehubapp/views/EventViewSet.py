@@ -61,7 +61,9 @@ class EventViewSet(viewsets.ModelViewSet):
     )
     def create(self, request, *args, **kwargs):
         if request.data['event_type'].lower() in EVENT_TYPES:
-            serializer = self.get_serializer(data=request.data)
+            event_data = request.data.copy()
+            event_data['created_by'] = self.request.user.id
+            serializer = self.get_serializer(data=event_data)
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
             return Response(serializer.data, status=status.HTTP_201_CREATED)

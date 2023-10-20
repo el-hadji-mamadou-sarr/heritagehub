@@ -44,7 +44,11 @@ class MarriageViewSet(viewsets.ModelViewSet):
         responses={201: 'Marriage created', 400: 'Bad Request'},
     )
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        
+        marriage_data = request.data.copy()
+        marriage_data['created_by'] = self.request.user.id
+        serializer = self.get_serializer(data=marriage_data)
+
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         return Response(serializer.data, status=status.HTTP_201_CREATED)

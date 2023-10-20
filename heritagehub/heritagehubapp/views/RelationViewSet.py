@@ -62,7 +62,9 @@ class RelationViewSet(viewsets.ModelViewSet):
     )
     def create(self, request, *args, **kwargs):
         if request.data['relation_type'].lower() in RELATION_TYPES:
-            serializer = self.get_serializer(data=request.data)
+            relation_data = request.data.copy()
+            relation_data['created_by'] = self.request.user.id
+            serializer = self.get_serializer(data=relation_data)
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
             return Response(serializer.data, status=status.HTTP_201_CREATED)

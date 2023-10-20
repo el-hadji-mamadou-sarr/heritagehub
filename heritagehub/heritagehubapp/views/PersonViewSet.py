@@ -44,10 +44,7 @@ class PersonViewSet(viewsets.ModelViewSet):
         responses={201: 'Person created', 400: 'Bad Request'},
     )
     def create(self, request, *args, **kwargs):
-        # get a copy of the request data
         person_data = request.data.copy()
-
-        # add the created_by field to the object
         person_data['created_by'] = self.request.user.id
         
         serializer = self.get_serializer(data=person_data)
