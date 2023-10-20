@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from .MarriageModel import MarriageModel
 from .FamillyModel import FamillyModel
+from django.contrib.auth.models import User
 
 def get_default_admin():
     user = User.objects.get()[0]
@@ -30,8 +31,7 @@ class PersonModel (models.Model):
                                             blank=True, 
                                             null=True,
                                             default=None)
-    created_by = models.IntegerField()
-    
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)    
     
     
 

@@ -4,10 +4,13 @@ from heritagehub.heritagehubapp.models import FamillyModel
 from heritagehub.heritagehubapp.models import MarriageModel
 from .EventSerializer import EventSerializer
 from .RelationSerializer import RelationSerializer
+from django.contrib.auth.models import User
 
 class PersonSerializer(serializers.HyperlinkedModelSerializer):
     familly_id = serializers.PrimaryKeyRelatedField(queryset=FamillyModel.objects.all(), allow_null=True)
     child_from_marriage = serializers.PrimaryKeyRelatedField(queryset=MarriageModel.objects.all(), allow_null=True)
+    created_by = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+
     events = EventSerializer(many=True, read_only=True)
     relations = RelationSerializer(many=True, read_only=True)
     class Meta:
