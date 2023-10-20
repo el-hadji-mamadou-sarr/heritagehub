@@ -4,13 +4,18 @@ from rest_framework.test import APITestCase
 from heritagehub.heritagehubapp.models import FamillyModel
 from rest_framework import status
 
+
 class FamillyViewSetTests(APITestCase):
 
     def setUp(self) -> None:
-        self.user = User.objects.create_user(username='adminTest', password='azerty1234', email='adminTest@test.com')
+        self.user = User.objects.create_user(
+            username='adminTest', password='azerty1234', email='adminTest@test.com')
+        self.user2 = User.objects.create_user(
+            username='adminTest2', password='azerty1234', email='adminTest2@test.com')
         self.client.force_authenticate(user=self.user)
-        self.familly_data={}
-        self.test_familly = FamillyModel.objects.create(created_by=self.user.id,**self.familly_data)
+        self.familly_data = {}
+        self.test_familly = FamillyModel.objects.create(
+            created_by=self.user, **self.familly_data)
 
     def test_list_famillies(self):
         """
@@ -24,10 +29,11 @@ class FamillyViewSetTests(APITestCase):
         """
         Test that an authenticated user can create a new family.
         """
-        response = self.client.post('/famillies/', self.familly_data, format='json')
+        response = self.client.post(
+            '/famillies/', self.familly_data, format='json')
         self.assertEquals(response.status_code, status.HTTP_201_CREATED)
-        self.assertEquals(FamillyModel.objects.count(),2)
-        self.assertEquals(FamillyModel.objects.last().created_by,self.user.id)  
+        self.assertEquals(FamillyModel.objects.count(), 2)
+        self.assertEquals(FamillyModel.objects.last().created_by, self.user)
 
     def test_retreive_familly(self):
         """
@@ -36,16 +42,17 @@ class FamillyViewSetTests(APITestCase):
         response = self.client.get(f'/famillies/{self.test_familly.id}/')
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.assertEquals(response.data['created_by'], self.user.id)
-    
+
     def test_partial_update_familly_authenticate_user(self):
         """
         Test that an authenticated user can partially update a family, and 'created_by' field is updated.
         """
-        updated_data = {'created_by':2}
-        response = self.client.patch(f'/famillies/{self.test_familly.id}/',updated_data, format='json')
+        updated_data = {'created_by': self.user2.id}
+        response = self.client.patch(
+            f'/famillies/{self.test_familly.id}/', updated_data, format='json')
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.test_familly.refresh_from_db()
-        self.assertEquals(self.test_familly.created_by, 2)
+        self.assertEquals(self.test_familly.created_by.id, self.user2.id)
 
     def test_destroy_familly_authenticated_user(self):
         """
@@ -55,7 +62,7 @@ class FamillyViewSetTests(APITestCase):
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         with self.assertRaises(FamillyModel.DoesNotExist):
             FamillyModel.objects.get(id=self.test_familly.id)
-    
+
     def test_destroy_familly_noexistant(self):
         """
         Test that attempting to delete a non-existent family returns a 404 Not Found status.
