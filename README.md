@@ -23,7 +23,7 @@ chaque membre de leur famille.
 
 ## Faire les tests unitaires
 
-`python manage.py tests `
+`python manage.py test `
 
 ## python version
 
