@@ -15,20 +15,30 @@ class MarriageViewSetTests(APITestCase):
             username='adminTest2', password='azerty1234', email='adminTest2@test.com')
         self.client.force_authenticate(user=self.user)
 
-        person_data = {
-            "first_name": "test first_name",
-            "last_name": "test last_name",
+        husband_data = {
+            "first_name": "test first_name husband",
+            "last_name": "test last_name husband",
+            "birth_date": "2000-08-07",
+            "familly_id": None,
+            "child_from_marriage": None
+        }
+        wife_data = {
+            "first_name": "test first_name wife",
+            "last_name": "test last_name wife",
             "birth_date": "2000-08-07",
             "familly_id": None,
             "child_from_marriage": None
         }
 
-        self.test_person = PersonModel.objects.create(
-            created_by=self.user, **person_data)
+        test_husband = PersonModel.objects.create(
+            created_by=self.user, **husband_data)
+
+        test_wife = PersonModel.objects.create(
+            created_by=self.user, **wife_data)
 
         self.marriage_data = {
-            "husband_id": 1,
-            "wife_id": 5,
+            "husband_id": test_husband,
+            "wife_id": test_wife,
             "marriage_date": "2023-08-07"
         }
 
@@ -48,15 +58,20 @@ class MarriageViewSetTests(APITestCase):
         Test that an authenticated user can create a new marriage.
         """
 
+        marriage_data = {
+            "husband_id": 1,
+            "wife_id": 2,
+            "marriage_date": "2022-08-07"
+        }
         response = self.client.post(
-            '/marriages/', self.marriage_data, format='json')
+            '/marriages/', marriage_data, format='json')
         self.assertEquals(response.status_code, status.HTTP_201_CREATED)
         self.assertEquals(MarriageModel.objects.count(), 2)
         self.assertEquals(MarriageModel.objects.last().created_by, self.user)
         self.assertEquals(MarriageModel.objects.last(
-        ).husband_id, self.marriage_data['husband_id'])
-        self.assertEquals(MarriageModel.objects.last().wife_id,
-                          self.marriage_data['wife_id'])
+        ).husband_id.id, marriage_data['husband_id'])
+        self.assertEquals(MarriageModel.objects.last().wife_id.id,
+                          marriage_data['wife_id'])
 
     def test_retreive_marriage(self):
         """
@@ -65,23 +80,25 @@ class MarriageViewSetTests(APITestCase):
         response = self.client.get(f'/marriages/{self.test_marriage.id}/')
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.assertEquals(response.data['created_by'], self.user.id)
-        self.assertEquals(response.data['husband_id'], 1)
-        self.assertEquals(response.data['wife_id'], 5)
+        self.assertEquals(
+            response.data['husband_id'], self.marriage_data['husband_id'].id)
+        self.assertEquals(response.data['wife_id'],
+                          self.marriage_data['wife_id'].id)
 
     def test_partial_update_mariage_authenticate_user(self):
         """
         Test that an authenticated user can partially update a marriage, and 'created_by',husband_id and wife_id fields are updated.
         """
         updated_data = {'created_by': self.user2.id,
-                        'husband_id': 2}
+                        'marriage_date': "2023-08-14"}
         response = self.client.patch(
             f'/marriages/{self.test_marriage.id}/', updated_data, format='json')
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.test_marriage.refresh_from_db()
         self.assertEquals(self.test_marriage.created_by.id,
                           updated_data['created_by'])
-        self.assertEquals(self.test_marriage.husband_id,
-                          updated_data['husband_id'])
+        self.assertEquals(self.test_marriage.marriage_date.strftime('%Y-%m-%d'),
+                          updated_data['marriage_date'])
 
     def test_destroy_marriage_authenticated_user(self):
         """
