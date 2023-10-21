@@ -52,7 +52,7 @@ class FamillyViewSetTests(APITestCase):
             f'/famillies/{self.test_familly.id}/', updated_data, format='json')
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.test_familly.refresh_from_db()
-        self.assertEquals(self.test_familly.created_by.id, self.user2.id)
+        self.assertEquals(self.test_familly.created_by.id, updated_data['created_by'])
 
     def test_destroy_familly_authenticated_user(self):
         """

@@ -16,8 +16,8 @@ class MarriageViewSetTests(APITestCase):
         self.client.force_authenticate(user=self.user)
 
         person_data = {
-            "first_name": "ibrahim",
-            "last_name": "sarr",
+            "first_name": "test first_name",
+            "last_name": "test last_name",
             "birth_date": "2000-08-07",
             "familly_id": None,
             "child_from_marriage": None
@@ -45,7 +45,7 @@ class MarriageViewSetTests(APITestCase):
 
     def test_create_marriage_authenticate_user(self):
         """
-        Test that an authenticated user can create a new event.
+        Test that an authenticated user can create a new marriage.
         """
 
         response = self.client.post(
@@ -53,12 +53,14 @@ class MarriageViewSetTests(APITestCase):
         self.assertEquals(response.status_code, status.HTTP_201_CREATED)
         self.assertEquals(MarriageModel.objects.count(), 2)
         self.assertEquals(MarriageModel.objects.last().created_by, self.user)
-        self.assertEquals(MarriageModel.objects.last().husband_id, 1)
-        self.assertEquals(MarriageModel.objects.last().wife_id, 5)
+        self.assertEquals(MarriageModel.objects.last(
+        ).husband_id, self.marriage_data['husband_id'])
+        self.assertEquals(MarriageModel.objects.last().wife_id,
+                          self.marriage_data['wife_id'])
 
     def test_retreive_marriage(self):
         """
-        Test that an authenticated user can retrieve a event and that the 'created_by' field matches the user's ID.
+        Test that an authenticated user can retrieve a marriage 
         """
         response = self.client.get(f'/marriages/{self.test_marriage.id}/')
         self.assertEquals(response.status_code, status.HTTP_200_OK)
@@ -66,9 +68,9 @@ class MarriageViewSetTests(APITestCase):
         self.assertEquals(response.data['husband_id'], 1)
         self.assertEquals(response.data['wife_id'], 5)
 
-    def test_partial_update_event_authenticate_user(self):
+    def test_partial_update_mariage_authenticate_user(self):
         """
-        Test that an authenticated user can partially update a event, and 'created_by' field is updated.
+        Test that an authenticated user can partially update a marriage, and 'created_by',husband_id and wife_id fields are updated.
         """
         updated_data = {'created_by': self.user2.id,
                         'husband_id': 2}
@@ -76,21 +78,23 @@ class MarriageViewSetTests(APITestCase):
             f'/marriages/{self.test_marriage.id}/', updated_data, format='json')
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.test_marriage.refresh_from_db()
-        self.assertEquals(self.test_marriage.created_by, self.user2)
-        self.assertEquals(self.test_marriage.husband_id, 2)
+        self.assertEquals(self.test_marriage.created_by.id,
+                          updated_data['created_by'])
+        self.assertEquals(self.test_marriage.husband_id,
+                          updated_data['husband_id'])
 
-    def test_destroy_event_authenticated_user(self):
+    def test_destroy_marriage_authenticated_user(self):
         """
-        Test that an authenticated user can delete a event and it no longer exists in the database.
+        Test that an authenticated user can delete a marriage and it no longer exists in the database.
         """
         response = self.client.delete(f'/marriages/{self.test_marriage.id}/')
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         with self.assertRaises(MarriageModel.DoesNotExist):
             MarriageModel.objects.get(id=self.test_marriage.id)
 
-    def test_destroy_event_noexistant(self):
+    def test_destroy_marriage_noexistant(self):
         """
-        Test that attempting to delete a non-existent event returns a 404 Not Found status.
+        Test that attempting to delete a non-existent marriage returns a 404 Not Found status.
         """
         response = self.client.delete('/marriages/999/')
         self.assertEquals(response.status_code, status.HTTP_404_NOT_FOUND)
