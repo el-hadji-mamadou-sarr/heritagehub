@@ -3,5 +3,7 @@ env
 heritagehubenv
 
 # base de données sqlite
-*.sqlite3
+db.sqlite3
+.idea
+.vscode
 migrations/
