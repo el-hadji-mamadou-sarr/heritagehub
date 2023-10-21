@@ -16,8 +16,8 @@ class EventViewSetTests(APITestCase):
         self.client.force_authenticate(user=self.user)
 
         person_data = {
-            "first_name": "ibrahim",
-            "last_name": "sarr",
+            "first_name": "test first_name",
+            "last_name": "test last_name",
             "birth_date": "2000-08-07",
             "familly_id": None,
             "child_from_marriage": None

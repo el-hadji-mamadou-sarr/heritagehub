@@ -104,6 +104,7 @@ class EventViewSet(viewsets.ModelViewSet):
             }
         ),
         responses={200: 'Event updated',
+                   406: 'Not Acceptable',
                    400: 'Bad Request', 401: 'Unauthorized'},
     )
     def partial_update(self, request, *args, **kwargs):
@@ -112,7 +113,9 @@ class EventViewSet(viewsets.ModelViewSet):
         event = get_object_or_404(EventModel, pk=event_id)
 
         if self.request.user == event.created_by:
-
+            if 'relation_type' in request.data:
+                if request.data['event_type'].lower() not in EVENT_TYPES:
+                    return Response({"message": "This event type does not exist"}, status=status.HTTP_406_NOT_ACCEPTABLE)
             serializer = self.get_serializer(
                 event, data=request.data, partial=True)
             serializer.is_valid(raise_exception=True)
