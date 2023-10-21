@@ -1,4 +1,4 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, filters
 from rest_framework.response import Response
 from heritagehub.heritagehubapp.permissions import IsGetRequest
 from rest_framework.permissions import IsAuthenticated
@@ -14,6 +14,8 @@ class PersonViewSet(viewsets.ModelViewSet):
     queryset = PersonModel.objects.all().order_by('id')
     serializer_class = PersonSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['first_name', 'last_name']
 
     def get_permissions(self):
         if self.action == 'list' or self.action == 'retrieve':

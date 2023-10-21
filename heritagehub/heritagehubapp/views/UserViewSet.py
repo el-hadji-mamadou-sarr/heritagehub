@@ -1,9 +1,8 @@
 from django.contrib.auth.models import User, Group
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, filters
 from rest_framework.response import Response
-from heritagehub.heritagehubapp.permissions import IsGetRequest, CanCreateUser, CanListUsers
+from heritagehub.heritagehubapp.permissions import IsGetRequest, IsAnonymeUser, IsSuperAdmin
 from rest_framework.permissions import IsAuthenticated
 from heritagehub.heritagehubapp.serializers.UserSerializer import UserSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -18,12 +17,14 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
     permission_classes = []
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['username', 'email']
 
     def get_permissions(self):
         if self.action == 'create':
-            permission_class = [CanCreateUser]
+            permission_class = [IsAnonymeUser]
         else:
-            permission_class = [CanListUsers]
+            permission_class = [IsSuperAdmin]
 
         return [permission() for permission in permission_class]
 
@@ -72,16 +73,6 @@ class UserViewSet(viewsets.ModelViewSet):
             'refresh_token': str(refresh),
         }
         return Response(response_data, status=status.HTTP_201_CREATED)
-
-    @swagger_auto_schema(
-        operation_description='List all users',
-        responses={200: 'User list', 403: 'Forbidden'},
-    )
-    def list(self, request, *args, **kwargs):
-        users = User.objects.all()
-        serializer = UserSerializer(
-            users, many=True, context={'request': request})
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
         operation_description='Retrieve a user',
