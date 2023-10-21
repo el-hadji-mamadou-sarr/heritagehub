@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User, Group
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework import viewsets, status
 from rest_framework.response import Response
@@ -80,4 +81,16 @@ class UserViewSet(viewsets.ModelViewSet):
         users = User.objects.all()
         serializer = UserSerializer(
             users, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        operation_description='Retrieve a user',
+        responses={200: 'user retrieved',
+                   404: 'Not Found', 403: 'Forbidden'},
+    )
+    def retrieve(self, request, *args, **kwargs):
+        user_id = kwargs.get('pk')
+        user = get_object_or_404(User, pk=user_id)
+
+        serializer = self.get_serializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)

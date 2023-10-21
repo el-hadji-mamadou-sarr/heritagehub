@@ -3,3 +3,4 @@ from .EventViewSetTests import EventViewSetTests
 from .MarriageViewSetTests import MarriageViewSetTests
 from .PersonViewSetTests import PersonViewSetTests
 from .RelationViewSetTests import RelationViewSetTests
+from .UserViewSetTests import UserViewSetTests

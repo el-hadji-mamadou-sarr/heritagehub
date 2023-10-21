@@ -20,7 +20,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
                   'events', 'marriages', 'persons', 'relations')
 
     def __init__(self, *args, **kwargs):
-        # Pass the 'request' from the kwargs to the context
         request = kwargs.pop('context', {}).get('request')
         super(UserSerializer, self).__init__(
             *args, **kwargs, context={'request': request})
