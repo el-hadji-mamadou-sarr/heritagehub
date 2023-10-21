@@ -18,7 +18,9 @@ class PersonViewSetTests(APITestCase):
             "last_name": "test last_name",
             "birth_date": "2000-08-07",
             "familly_id": None,
-            "child_from_marriage": None
+            "child_from_marriage": None,
+            "father_id": None,
+            "mother_id": None
         }
         self.test_person = PersonModel.objects.create(
             created_by=self.user, **self.person_data)

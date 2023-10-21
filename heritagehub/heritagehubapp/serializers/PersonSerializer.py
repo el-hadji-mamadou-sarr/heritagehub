@@ -15,9 +15,9 @@ class PersonSerializer(serializers.HyperlinkedModelSerializer):
     created_by = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all())
     father_id = serializers.PrimaryKeyRelatedField(
-        queryset=PersonModel.objects.all())
+        queryset=PersonModel.objects.all(), allow_null=True)
     mother_id = serializers.PrimaryKeyRelatedField(
-        queryset=PersonModel.objects.all())
+        queryset=PersonModel.objects.all(), allow_null=True)
     events = EventSerializer(many=True, read_only=True)
     relations = RelationSerializer(many=True, read_only=True)
 

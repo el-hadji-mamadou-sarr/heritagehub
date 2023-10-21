@@ -23,12 +23,25 @@ class RelationViewSetTests(APITestCase):
             "child_from_marriage": None
         }
 
-        self.test_person = PersonModel.objects.create(
+        cousin_data = {
+            "first_name": "test first_name cousin",
+            "last_name": "test last_name cousin",
+            "birth_date": "2004-08-07",
+            "familly_id": None,
+            "child_from_marriage": None
+        }
+
+        
+
+        test_person = PersonModel.objects.create(
             created_by=self.user, **person_data)
+        
+        test_cousin = PersonModel.objects.create(
+            created_by=self.user, **cousin_data)
 
         self.relation_data = {
-            "person_id": self.test_person,
-            "other_person_id": 4,
+            "person_id": test_person,
+            "other_person_id": test_cousin,
             "relation_type": "cousine"
         }
 
@@ -50,7 +63,7 @@ class RelationViewSetTests(APITestCase):
 
         relation_data = {
             "person_id": 1,
-            "other_person_id": 4,
+            "other_person_id": 2,
             "relation_type": "cousine"
         }
         response = self.client.post(
@@ -68,7 +81,7 @@ class RelationViewSetTests(APITestCase):
 
         relation_data = {
             "person_id": 1,
-            "other_person_id": 4,
+            "other_person_id": 2,
             "relation_type": "invalid relation type"
         }
         response = self.client.post(
