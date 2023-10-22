@@ -6,7 +6,7 @@ chaque membre de leur famille.
 ## Fonctionnalités
 
 - Créer un compte utilisateur avec un identifiant unique.
-- Se connceter à compte avec son identifiant et son mot de passe.
+- Se connceter sur son compte avec son identifiant et son mot de passe.
 - se déconnecter de son compte.
 - La création d'entités (familles, personnes, événements, marriages, etc) est uniquement réservée aux utilisateurs authentifiés.
 - Protection des données utilisateurs: seul le super utilisateur peut lister les utilisateurs et afficher leurs détails.
