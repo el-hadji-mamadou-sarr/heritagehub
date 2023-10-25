@@ -27,7 +27,10 @@ SECRET_KEY = 'django-insecure-)&2bhmd1-c0k&el57zajbo-n5i$w@*2(8bk39b)-2)1o#2^+39
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = (
+       'http://localhost:4200',
+)
 
 # Application definition
 
@@ -44,10 +47,12 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'drf_yasg',
     'django_filters',
+    'corsheaders',
     'heritagehub.heritagehubapp',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
