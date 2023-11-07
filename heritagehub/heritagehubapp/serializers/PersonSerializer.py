@@ -21,8 +21,20 @@ class PersonSerializer(serializers.HyperlinkedModelSerializer):
     events = EventSerializer(many=True, read_only=True)
     relations = RelationSerializer(many=True, read_only=True)
 
+    father = serializers.SerializerMethodField()
+    mother = serializers.SerializerMethodField()
     class Meta:
         model = PersonModel
         fields = ('id', 'first_name', 'last_name', 'birth_date', 'gender', 'created_at',
                   'updated_at', 'death_date', 'death_place', 'father_id',
-                  'mother_id', 'familly_id', 'child_from_marriage', 'created_by', 'events', 'relations')
+                  'mother_id', 'familly_id', 'child_from_marriage', 'created_by', 'events', 'relations', 'father', 'mother')
+
+    def get_father(self, obj):
+        if obj.father_id:
+            return PersonSerializer(obj.father_id).data
+        return None
+    
+    def get_mother(self, obj):
+        if obj.mother_id:
+            return PersonSerializer(obj.mother_id).data
+        return None
