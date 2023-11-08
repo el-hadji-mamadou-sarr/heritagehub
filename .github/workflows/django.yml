@@ -31,5 +31,4 @@ jobs:
           python manage.py test
       - name: run server
         run: |
-          pm2 start pm2config.json
-          pm2 save
+          python manage.py runserver
