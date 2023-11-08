@@ -1,4 +1,7 @@
 command = '/home/heritagehub/actions-runner/_work/heritagehub/heritagehub/env/bin/gunicorn'
 pythonpath = '/home/heritagehub/actions-runner/_work/heritagehub/heritagehub'
-bind = '4.210.225.238:8000'
+bind = '127.0.0.1:8000'
 workers = 3
+timeout = 120
+accesslog = '-'
+module = 'heritagehub.wsgi:application'
