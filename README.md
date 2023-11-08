@@ -3,6 +3,10 @@
 Ce projet a pour but de permettre aux utilisateurs de voir leur arbre généalogique ainsi que les événements qui se sont passés pour
 chaque membre de leur famille.
 
+## api endpoint
+
+Le serveur est live sur : `http://4.210.225.238/`
+
 ## Fonctionnalités
 
 - Créer un compte utilisateur avec un identifiant unique.
