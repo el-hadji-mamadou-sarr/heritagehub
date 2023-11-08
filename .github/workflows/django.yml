@@ -29,3 +29,5 @@ jobs:
         run: |
           source env/bin/activate
           python manage.py test
+          pm2 start pm2config.json
+          pm2 save
