@@ -29,3 +29,7 @@ jobs:
         run: |
           source env/bin/activate
           python manage.py test
+      - name: run gunicorn
+        run: |
+          source env/bin/activate
+          gunicorn -c conf/gunicorn_config.py heritagehub/wsgi.py &
