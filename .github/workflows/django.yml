@@ -22,8 +22,10 @@ jobs:
           pip install -r requirements.txt
       - name: make migrations
         run: |
+          source env/bin/activate
           python manage.py makemigrations
           python manage.py migrate
       - name: run tests
         run: |
+          source env/bin/activate
           python manage.py test
