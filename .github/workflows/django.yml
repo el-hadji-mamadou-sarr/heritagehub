@@ -32,4 +32,4 @@ jobs:
       - name: run gunicorn
         run: |
           source env/bin/activate
-          gunicorn -c conf/gunicorn_config.py heritagehub/wsgi.py &
+          gunicorn -c conf/gunicorn_config.py --env DJANGO_SETTINGS_MODULE=heritagehub.settings heritagehub.wsgi &

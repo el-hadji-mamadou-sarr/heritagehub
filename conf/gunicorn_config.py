@@ -2,6 +2,3 @@ command = '/home/heritagehub/actions-runner/_work/heritagehub/heritagehub/env/bi
 pythonpath = '/home/heritagehub/actions-runner/_work/heritagehub/heritagehub'
 bind = '127.0.0.1:8000'
 workers = 3
-timeout = 120
-accesslog = '-'
-module = 'heritagehub.wsgi:application'
