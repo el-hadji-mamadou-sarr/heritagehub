@@ -28,9 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['4.210.225.238']
 CORS_ORIGIN_ALLOW_ALL = True
-CORS_ORIGIN_WHITELIST = (
-       'http://localhost:4200',
-)
+
 
 # Application definition
 
