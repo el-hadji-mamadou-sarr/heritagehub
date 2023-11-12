@@ -25,7 +25,6 @@ EVENT_TYPES = [
     "mort",
     "annivairsaire"]
 
-
 class EventViewSet(viewsets.ModelViewSet):
 
     queryset = EventModel.objects.all().order_by('id')
