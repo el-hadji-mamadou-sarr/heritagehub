@@ -5,6 +5,5 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user) -> Token:
         token= super().get_token(user)
-        # ajouter le champ isAdmin dans le token
-        token['userID']=user.id
+        token['sub']=user.id
         return token
